@@ -1,6 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { AsyncThunkConfig } from 'common/interfaces';
+import { getSession } from './authSlice';
 
 export interface INotice {
 	message: string;
@@ -48,7 +49,7 @@ export const initialize = createAsyncThunk<void, void, AsyncThunkConfig>(
 	async (_, { dispatch, rejectWithValue }) => {
 		dispatch(setLoading(true));
 		try {
-			// await dispatch(setAuth());
+			await dispatch(getSession());
 		} catch (error) {
 			return rejectWithValue('[initialize]: Error');
 		} finally {
