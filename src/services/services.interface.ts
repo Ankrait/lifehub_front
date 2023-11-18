@@ -5,7 +5,7 @@ export interface ISessionResponse {
 }
 
 export interface ILoginRequest {
-	login_email: string;
+	email_login: string;
 	password: string;
 }
 
