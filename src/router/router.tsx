@@ -1,7 +1,7 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 
-import { AuthLayout, RootLayout } from 'layouts';
-import { Account, Home, Login, Registration } from 'pages';
+import { RootLayout } from 'layouts';
+import { Account, Home, Login, Main, Registration } from 'pages';
 
 export const createRouter = (isAuth: boolean) => {
   return createBrowserRouter([
@@ -15,7 +15,7 @@ export const createRouter = (isAuth: boolean) => {
               children: [
                 {
                   path: '/',
-                  element: <>MAIN</>,
+                  element: <Main />,
                 },
                 {
                   path: '/account',
@@ -35,7 +35,6 @@ export const createRouter = (isAuth: boolean) => {
             },
             {
               path: '/auth',
-              element: <AuthLayout />,
               children: [
                 {
                   path: '/auth',

@@ -1,23 +1,26 @@
 import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Container, Grid } from '@mui/material';
 
-import { useAppDispatch } from 'common/hooks';
-import { logout } from 'store/reducers/authSlice';
+import { Logo } from 'components';
+import UserSelect from './UserSelect/UserSelect';
+import GroupCreator from './GroupCreator/GroupCreator';
 
 const RootLayout: FC = () => {
-  const dispatch = useAppDispatch();
-
-  const onExitClick = () => {
-    dispatch(logout());
-  };
-
   return (
     <>
-      <Button onClick={onExitClick} variant="contained" color="error">
-        Выход
-      </Button>
-      <Outlet />
+      <Container component="header">
+        <Grid paddingY={1} container justifyContent="space-between" alignItems="center">
+          <Logo />
+          <UserSelect />
+        </Grid>
+      </Container>
+
+      <Container sx={{ marginTop: 3 }}>
+        <Outlet />
+      </Container>
+
+      <GroupCreator />
     </>
   );
 };

@@ -2,6 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { AsyncThunkConfig } from 'common/interfaces';
 import { getSession } from './authSlice';
+import { getUserGroups } from './groupSlice';
 
 export interface INotice {
 	message: string;
@@ -50,6 +51,7 @@ export const initialize = createAsyncThunk<void, void, AsyncThunkConfig>(
 		dispatch(setLoading(true));
 		try {
 			await dispatch(getSession());
+			await dispatch(getUserGroups());
 		} catch (error) {
 			return rejectWithValue('[initialize]: Error');
 		} finally {

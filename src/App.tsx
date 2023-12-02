@@ -1,28 +1,37 @@
+import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
-import { Container } from '@mui/material';
+import { LinearProgress } from '@mui/material';
 
 import { createRouter } from 'router/router';
 import { useAppDispatch, useAppSelector } from 'common/hooks';
-import { useEffect } from 'react';
 import { initialize } from 'store/reducers/appSlice';
+import { FullscreenLoader } from 'components';
+import NoticePopup from 'components/NoticePopup/NoticePopup';
 
 function App() {
-  const { user } = useAppSelector(state => state.auth);
+  const { user, isAuthLoading } = useAppSelector(state => state.auth);
   const { isAppInitialized } = useAppSelector(state => state.app);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(initialize());
-  }, []);
+  }, [dispatch]);
 
   if (!isAppInitialized) {
-    return <></>;
+    return <FullscreenLoader />;
   }
 
   return (
-    <Container>
+    <>
+      {isAuthLoading && (
+        <LinearProgress
+          color="primary"
+          sx={{ position: 'fixed', top: 0, left: 0, width: '100%' }}
+        />
+      )}
       <RouterProvider router={createRouter(!!user)} />
-    </Container>
+      <NoticePopup />
+    </>
   );
 }
 

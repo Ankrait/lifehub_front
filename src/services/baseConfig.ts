@@ -4,24 +4,23 @@ import { store } from 'store/createStore';
 import { setNotice } from 'store/reducers/appSlice';
 
 export const baseConfig = axios.create({
-	baseURL: 'http://localhost:3011',
-	withCredentials: true
+  baseURL: 'http://localhost:3011',
+  withCredentials: true,
 });
 
 baseConfig.interceptors.response.use(
-	(response) => response,
-	(error) => {
-		const setError = (message: string) => setNotice({ message, type: 'error' });
-		const status = error.response.status;
+  response => response,
+  error => {
+    const setError = (message: string) => setNotice({ message, type: 'error' });
+    const status = error.response.status;
 
-		if (status >= 500) {
-			store.dispatch(setError('Упс! Что-то пошло не так'));
-		} else if (error.code === 'ERR_NETWORK') {
-			store.dispatch(setError('Проверьте подключение к интернету'));
-		} else {
-			console.error(error);
-		}
-
-		return Promise.reject(error);
-	}
+    if (status >= 500) {
+      store.dispatch(setError('Упс! Что-то пошло не так'));
+    } else if (error.code === 'ERR_NETWORK') {
+      store.dispatch(setError('Проверьте подключение к интернету'));
+    } else {
+      console.log(error);
+      return Promise.reject(error);
+    }
+  },
 );
