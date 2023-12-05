@@ -18,10 +18,33 @@ export interface IRegistrationRequest {
 export interface IGroup {
   id: number;
   name: string;
-  image?: string;
+  image: string | null;
+}
+
+export interface IFullGroup extends IGroup {
+  stats: {
+    notesCount: number;
+    plansCount: {
+      finished: number;
+      started: number;
+    };
+  };
 }
 
 export interface ICreateGroupRequest {
   name: string;
   image?: string;
 }
+
+export interface INote {
+  id: number;
+  message: string;
+  isImportant: boolean;
+  groupId: number;
+}
+
+export interface ICreateNoteRequest extends Pick<INote, 'groupId' | 'message'> {}
+
+export interface IUpdateNoteRequest
+  extends Pick<INote, 'id'>,
+    Partial<Pick<INote, 'message' | 'isImportant'>> {}

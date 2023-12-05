@@ -10,16 +10,18 @@ import {
 
 import { AsyncThunkConfig } from 'common/interfaces';
 import { groupService } from 'services/services';
-import { ICreateGroupRequest, IGroup } from 'services/services.interface';
+import { ICreateGroupRequest, IFullGroup, IGroup } from 'services/services.interface';
 
 interface IGroupInitialState {
   groups: IGroup[];
+  group: IFullGroup | null;
   isGroupLoading: boolean;
   isGroupCreatorOpened: boolean;
 }
 
 const initialState: IGroupInitialState = {
   groups: [],
+  group: null,
   isGroupLoading: false,
   isGroupCreatorOpened: false,
 };
@@ -33,7 +35,7 @@ export const groupSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    const thunks = [getUserGroups, createGroup] as const;
+    const thunks = [getUserGroups, createGroup, getGroup] as const;
 
     builder
       .addCase(getUserGroups.fulfilled, (state, { payload }) => {
@@ -41,6 +43,9 @@ export const groupSlice = createSlice({
       })
       .addCase(createGroup.fulfilled, (state, { payload }) => {
         state.groups.push(payload);
+      })
+      .addCase(getGroup.fulfilled, (state, { payload }) => {
+        state.group = payload;
       })
       .addMatcher(isAnyOf(isRejected(...thunks), isFulfilled(...thunks)), state => {
         state.isGroupLoading = false;
@@ -53,6 +58,17 @@ export const groupSlice = createSlice({
 
 export const groupReducer = groupSlice.reducer;
 export const { setGroupCreatorOpened } = groupSlice.actions;
+
+export const getGroup = createAsyncThunk<IFullGroup, number, AsyncThunkConfig>(
+  'group/getGroup',
+  async (id, { rejectWithValue }) => {
+    try {
+      return await groupService.get(id);
+    } catch {
+      return rejectWithValue('[getGroup]: Error');
+    }
+  },
+);
 
 export const getUserGroups = createAsyncThunk<IGroup[], void, AsyncThunkConfig>(
   'group/getUserGroups',

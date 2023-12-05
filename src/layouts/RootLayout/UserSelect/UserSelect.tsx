@@ -1,5 +1,5 @@
 import { FC, useRef, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import {
   Avatar,
   Box,
@@ -10,27 +10,30 @@ import {
   MenuItem,
   MenuList,
   Popper,
+  Typography,
 } from '@mui/material';
+import { grey, red } from '@mui/material/colors';
 import { KeyboardArrowDown } from '@mui/icons-material';
 
 import { logout } from 'store/reducers/authSlice';
 import { useAppDispatch, useAppSelector } from 'common/hooks';
-import { grey } from '@mui/material/colors';
 import { setGroupCreatorOpened } from 'store/reducers/groupSlice';
 
 const UserSelect: FC = () => {
-  const [isOpened, setOpened] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const { user } = useAppSelector(state => state.auth);
   const { groups } = useAppSelector(state => state.group);
 
-  const dispatch = useAppDispatch();
+  const [isOpened, setOpened] = useState(false);
 
   const onExitClick = () => {
     dispatch(logout());
   };
   const onGroupCreateClick = () => {
     dispatch(setGroupCreatorOpened(true));
-  }
+  };
 
   const anchorRef = useRef<HTMLDivElement | null>(null);
   const closeHandler = (event: Event | React.SyntheticEvent) => {
@@ -65,18 +68,30 @@ const UserSelect: FC = () => {
         anchorEl={anchorRef.current}
         placement="bottom-end"
         open={isOpened}
-        disablePortal
-        sx={{bgcolor: grey[100], borderRadius: 1, }}
+        sx={{ bgcolor: grey[100], borderRadius: 1 }}
       >
         <ClickAwayListener onClickAway={closeHandler}>
           <MenuList>
             {groups.length !== 0 && (
               <>
                 {groups.map(group => (
-                  <MenuItem>
-                    <Avatar sx={{ bgcolor: 'red' }} alt={group.name} src={group.image}>
-                      {group.name}
+                  <MenuItem
+                    key={group.id}
+                    sx={{ gap: 1 }}
+                    onClick={() => navigate(`/group/${group.id}`)}
+                  >
+                    <Avatar
+                      sx={{
+                        bgcolor: red[300],
+                        width: '28px',
+                        height: '28px',
+                      }}
+                      alt={group.name}
+                      src={group.image || undefined}
+                    >
+                      {group.name.at(0)}
                     </Avatar>
+                    <Typography variant="h6">{group.name}</Typography>
                   </MenuItem>
                 ))}
                 <Divider />
@@ -84,9 +99,9 @@ const UserSelect: FC = () => {
             )}
             <MenuItem onClick={onGroupCreateClick} sx={{ padding: '3px 12px' }}>
               <ListItemText
-                primaryTypographyProps={{ fontSize: 14 }}
+                primaryTypographyProps={{ fontSize: 14, textAlign: 'center' }}
                 sx={{ whiteSpace: 'nowrap', fontSize: 2 }}
-                primary="Добавить группу"
+                primary="Создать группу"
               />
             </MenuItem>
             <MenuItem onClick={onExitClick} sx={{ padding: '3px 12px' }}>

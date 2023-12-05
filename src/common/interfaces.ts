@@ -10,3 +10,12 @@ export type AsyncThunkConfig = {
 	fulfilledMeta?: unknown;
 	rejectedMeta?: unknown;
 };
+
+export enum LoadingEnum {
+	IDLE,
+	GET,
+	CREATE,
+	UPDATE,
+	DELETE,
+	LOAD,
+}

@@ -20,7 +20,7 @@ baseConfig.interceptors.response.use(
       store.dispatch(setError('Проверьте подключение к интернету'));
     } else {
       console.log(error);
-      return Promise.reject(error);
     }
+    return Promise.reject(error);
   },
 );
