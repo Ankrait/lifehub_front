@@ -4,8 +4,8 @@ import { store } from 'store/createStore';
 import { setNotice } from 'store/reducers/appSlice';
 
 export const baseConfig = axios.create({
-  baseURL: 'http://localhost:3011',
-  // baseURL: 'https://0dc4-188-225-50-141.ngrok-free.app',
+  // baseURL: 'http://localhost:3011',
+  baseURL: 'https://0dc4-188-225-50-141.ngrok-free.app',
   withCredentials: true,
 });
 
