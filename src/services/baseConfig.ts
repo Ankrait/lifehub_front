@@ -5,7 +5,7 @@ import { setNotice } from 'store/reducers/appSlice';
 
 export const baseConfig = axios.create({
   // baseURL: 'http://localhost:3011',
-  baseURL: 'https://0dc4-188-225-50-141.ngrok-free.app',
+  baseURL: 'https://45b6-188-225-50-141.ngrok-free.app',
   withCredentials: true,
 });
 
