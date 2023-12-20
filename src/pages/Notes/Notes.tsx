@@ -94,7 +94,7 @@ const Notes: FC = () => {
 
       {!!selectedId && (
         <Grid paddingLeft={2} item xs={4}>
-          <SelectedNote id={selectedId} />
+          <SelectedNote id={selectedId} onClose={() => setSelectedId(null)} />
         </Grid>
       )}
     </Grid>

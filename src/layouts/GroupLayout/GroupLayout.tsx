@@ -25,7 +25,7 @@ const Group: FC = () => {
   }
 
   const groupNavigate = (val: 'notes' | 'plans' | 'settings') => () => {
-    navigate(`/group/${group.id}/notes`);
+    navigate(`/group/${group.id}/${val}`);
   };
 
   return (
@@ -43,8 +43,8 @@ const Group: FC = () => {
           {group.name}
         </Typography>
         <Button onClick={groupNavigate('notes')}>Notes</Button>
-        <Button>Plans</Button>
-        <Button>Settings</Button>
+        <Button onClick={groupNavigate('plans')}>Plans</Button>
+        <Button onClick={groupNavigate('settings')}>Settings</Button>
       </Grid>
       <Outlet />
     </>

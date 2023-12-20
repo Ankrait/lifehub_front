@@ -1,7 +1,7 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 
 import { GroupLayout, RootLayout } from 'layouts';
-import { Account, GroupMain, Home, Login, Main, Notes, Registration } from 'pages';
+import { Account, GroupMain, Home, Login, Main, Notes, Plans, Registration, Settings } from 'pages';
 
 export const createRouter = (isAuth: boolean) => {
   return createBrowserRouter([
@@ -35,11 +35,11 @@ export const createRouter = (isAuth: boolean) => {
                     },
                     {
                       path: '/group/:id/plans',
-                      element: <>Планы</>,
+                      element: <Plans />,
                     },
                     {
                       path: '/group/:id/settings',
-                      element: <>Настройки</>,
+                      element: <Settings />,
                     },
                   ],
                 },

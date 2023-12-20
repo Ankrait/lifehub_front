@@ -1,17 +1,18 @@
 import { FC, useEffect, useState } from 'react';
 import { Box, IconButton, TextField, Typography } from '@mui/material';
 import { green, grey, yellow } from '@mui/material/colors';
-import { DoneAll, PushPin } from '@mui/icons-material';
+import { DoneAll, PushPin, DeleteForever } from '@mui/icons-material';
 
 import { useAppDispatch, useAppSelector } from 'common/hooks';
-import { updateNote } from 'store/reducers/noteSlice';
+import { deleteNote, updateNote } from 'store/reducers/noteSlice';
 import { LoadingEnum } from 'common/interfaces';
 
 interface ISelectedNote {
   id: number;
+  onClose: () => void;
 }
 
-const SelectedNote: FC<ISelectedNote> = ({ id }) => {
+const SelectedNote: FC<ISelectedNote> = ({ id, onClose }) => {
   const dispatch = useAppDispatch();
   const note = useAppSelector(state => state.note.notes).find(el => el.id === id)!;
   const { loading } = useAppSelector(state => state.note);
@@ -19,7 +20,7 @@ const SelectedNote: FC<ISelectedNote> = ({ id }) => {
   const [value, setValue] = useState(note.message);
   const [saved, setSaved] = useState(false);
 
-  const toggleImportant = () => {
+  const toggleImportantHandler = () => {
     if (loading === LoadingEnum.UPDATE) return;
 
     dispatch(
@@ -28,6 +29,14 @@ const SelectedNote: FC<ISelectedNote> = ({ id }) => {
         isImportant: !note.isImportant,
       }),
     );
+  };
+
+  const deleteHandler = () => {
+    if (loading === LoadingEnum.DELETE) return;
+
+    onClose();
+
+    dispatch(deleteNote(note.id));
   };
 
   useEffect(() => {
@@ -95,13 +104,22 @@ const SelectedNote: FC<ISelectedNote> = ({ id }) => {
             </>
           )}
         </Box>
-        <IconButton
-          disabled={loading === LoadingEnum.UPDATE}
-          onClick={toggleImportant}
-          size="small"
-        >
-          <PushPin color={note.isImportant ? 'primary' : 'action'} />
-        </IconButton>
+        <Box>
+          <IconButton
+            disabled={loading === LoadingEnum.UPDATE}
+            onClick={toggleImportantHandler}
+            size="small"
+          >
+            <PushPin color={note.isImportant ? 'primary' : 'action'} />
+          </IconButton>
+          <IconButton
+            disabled={loading === LoadingEnum.DELETE}
+            onClick={deleteHandler}
+            size="small"
+          >
+            <DeleteForever color="error" />
+          </IconButton>
+        </Box>
       </Box>
       <TextField
         value={value}

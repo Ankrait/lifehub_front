@@ -40,6 +40,7 @@ const NoticePopup: FC = (): JSX.Element => {
             left: '50%',
             cursor: 'pointer',
             transform: 'translateX(-50%)',
+            zIndex: 2000,
           }}
           severity={notice.type}
         >

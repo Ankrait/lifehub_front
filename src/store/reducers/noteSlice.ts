@@ -3,7 +3,6 @@ import {
   createSlice,
   isAnyOf,
   isFulfilled,
-  isPending,
   isRejected,
 } from '@reduxjs/toolkit';
 
@@ -30,7 +29,7 @@ export const noteSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
-    const thunks = [getGroupNotes, updateNote, createNote] as const;
+    const thunks = [getGroupNotes, updateNote, createNote, deleteNote] as const;
 
     builder
       .addCase(createNote.pending, state => {
@@ -39,8 +38,17 @@ export const noteSlice = createSlice({
       .addCase(updateNote.pending, state => {
         state.loading = LoadingEnum.UPDATE;
       })
+      .addCase(deleteNote.pending, state => {
+        state.loading = LoadingEnum.DELETE;
+      })
+
+      .addCase(deleteNote.fulfilled, (state, { payload }) => {
+        state.notes = state.notes.filter(note => note.id !== payload);
+      })
 
       .addCase(getGroupNotes.pending, state => {
+        if (state.loading !== LoadingEnum.IDLE) return;
+
         state.loading = LoadingEnum.GET;
       })
       .addCase(getGroupNotes.fulfilled, (state, { payload }) => {
@@ -62,7 +70,7 @@ export const getGroupNotes = createAsyncThunk<INote[], number, AsyncThunkConfig>
     try {
       return await noteService.getByGroup(id);
     } catch {
-      return rejectWithValue('[getGroupNotes]: Error');
+      return rejectWithValue('[getGroupNotes]: Error!');
     }
   },
 );
@@ -72,10 +80,10 @@ export const createNote = createAsyncThunk<INote, ICreateNoteRequest, AsyncThunk
   async (data, { dispatch, rejectWithValue }) => {
     try {
       const res = await noteService.create(data);
-      dispatch(getGroupNotes(res.groupId));
+      await dispatch(getGroupNotes(res.groupId));
       return res;
     } catch {
-      return rejectWithValue('[createNote]: Error');
+      return rejectWithValue('[createNote]: Error!');
     }
   },
 );
@@ -89,6 +97,18 @@ export const updateNote = createAsyncThunk<INote, IUpdateNoteRequest, AsyncThunk
       return res;
     } catch {
       return rejectWithValue('[updateNote]: Error!');
+    }
+  },
+);
+
+export const deleteNote = createAsyncThunk<number, number, AsyncThunkConfig>(
+  'note/deleteNote',
+  async (id, { rejectWithValue }) => {
+    try {
+      await noteService.delete(id);
+      return id;
+    } catch {
+      return rejectWithValue('[deleteNote]: Error!');
     }
   },
 );

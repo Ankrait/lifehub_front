@@ -26,7 +26,7 @@ const TinyNote: FC<ITinyNote> = ({ note, rows = 3, onClick, active }) => {
         ':hover': {
           boxShadow: 'inset 2px 2px 13px -9px black',
         },
-        border: `1px solid ${active ? grey[600] : 'transparent'}`,
+        border: `1px solid ${active ? grey[400] : 'transparent'}`,
       }}
       position="relative"
     >

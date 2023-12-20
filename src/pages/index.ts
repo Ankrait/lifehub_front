@@ -6,5 +6,7 @@ import Main from './Main/Main';
 
 import GroupMain from './GroupMain/GroupMain';
 import Notes from './Notes/Notes';
+import Plans from './Plans/Plans';
+import Settings from './Settings/Settings';
 
-export { Account, Home, Login, Registration, Main, GroupMain, Notes };
+export { Account, Home, Login, Registration, Main, GroupMain, Notes, Plans, Settings };
